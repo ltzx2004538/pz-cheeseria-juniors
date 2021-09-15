@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 // Components
-import Item from '../component/Cart/Item/Item';
+import CheeseCard from '../component/CheeseCard/CheeseCard';
 import Cart from '../component/Cart/Cart';
 import Drawer from '@material-ui/core/Drawer';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -26,26 +26,28 @@ const Main = () => {
 		'cheeses',
 		getCheeses
 	);
+	const [showDetail, setShowDetail] = useState< boolean | null>(false);
 	console.log(data);
 
 	const getTotalItems = (items: ICartItem[]) =>
 		items.reduce((ack: number, item) => ack + item.amount, 0);
 
-	const handleAddToCart = (clickedItem: ICartItem) => {
-	setCartItems(prev => {
-		// 1. Is the item already added in the cart?
-		const isItemInCart = prev.find(item => item.id === clickedItem.id);
+	const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, clickedItem: ICartItem) => {
+		e.stopPropagation();
+		setCartItems(prev => {
+			// 1. Is the item already added in the cart?
+			const isItemInCart = prev.find(item => item.id === clickedItem.id);
 
-		if (isItemInCart) {
-		return prev.map(item =>
-			item.id === clickedItem.id
-			? { ...item, amount: item.amount + 1 }
-			: item
-		);
-		}
-		// First time the item is added
-		return [...prev, { ...clickedItem, amount: 1 }];
-	});
+			if (isItemInCart) {
+			return prev.map(item =>
+				item.id === clickedItem.id
+				? { ...item, amount: item.amount + 1 }
+				: item
+			);
+			}
+			// First time the item is added
+			return [...prev, { ...clickedItem, amount: 1 }];
+		});
 	};
 
 	const handleRemoveFromCart = (id: number) => {
@@ -63,6 +65,11 @@ const Main = () => {
 
 	if (isLoading) return <LinearProgress />;
 	if (error) return <div>Something went wrong ...</div>;
+
+	const handleClickCard = () => {
+		setShowDetail(prevState => !prevState);
+		console.log(showDetail)
+	}
 
 	return (
 
@@ -114,7 +121,7 @@ const Main = () => {
 		<Grid container spacing={3}>
 		{data?.map(item => (
 			<Grid item key={item.id} xs={12} sm={4}>
-			<Item item={item} handleAddToCart={handleAddToCart} />
+			<CheeseCard item={item} handleAddToCart={handleAddToCart} handleClickCard={handleClickCard}/>
 			</Grid>
 		))}
 		</Grid>
