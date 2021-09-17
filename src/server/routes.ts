@@ -15,11 +15,11 @@ router.get('/api/cheeses', (req, res, next) => {
 
 router.get('/api/orders', (req, res) => {
 	res.json(orderService.getOrders());
-})
+});
 
 router.post('/api/orders', jsonParser, (req,res) => {
 	const {cheeses,amount} = req.body;
 	const result = orderService.addOrder(cheeses,amount);
 	res.json(result);
-})
+});
 export default router;
