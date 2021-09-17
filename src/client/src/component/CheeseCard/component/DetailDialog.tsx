@@ -1,4 +1,6 @@
 import React from 'react';
+//Component
+import Avatar from '../../Avatar/Avatar';
 
 //UI
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -12,24 +14,31 @@ import { ICartItem } from '../../../interfaces/cart';
 
 interface Props {
 	open: boolean,
-	items: Array<ICartItem>,
+	item: ICartItem,
 	handleClose: ()=>void
 }
+
 const DetailDialog: React.FC<Props> = (props)=> {
 	const {
 		open,
-		items,
+		item,
 		handleClose,
-	} = props
+	} = props;
+
 	return(
 		<Dialog onClose={handleClose} aria-labelledby="cheesse-dialog-title" open={open}>
 			 <DialogTitle id="cheese-dialog-title">Cheese Details</DialogTitle>
 			 <List>
-			 	{items.map((cheese: ICartItem) => (
-					<ListItem button key={cheese.id}>
-						 <ListItemText primary={cheese.title} />
-					</ListItem>
-				))}
+				<ListItem>
+					<ListItemText primary={`${item.id}. ${item.title}`}/>
+					<Avatar name= {item.title} imgUrl= {item.image}/>
+				</ListItem>
+				<ListItem>
+					<ListItemText primary={item.description}/>
+				</ListItem>
+				<ListItem>
+					<ListItemText primary={`Price: $${item.price}`}/>
+				</ListItem>
 			 </List>
 		</Dialog>
 	)

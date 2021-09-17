@@ -26,7 +26,6 @@ const Main = () => {
 		'cheeses',
 		getCheeses
 	);
-	const [showDetail, setShowDetail] = useState< boolean | null>(false);
 	console.log(data);
 
 	const getTotalItems = (items: ICartItem[]) =>
@@ -65,11 +64,6 @@ const Main = () => {
 
 	if (isLoading) return <LinearProgress />;
 	if (error) return <div>Something went wrong ...</div>;
-
-	const handleClickCard = () => {
-		setShowDetail(prevState => !prevState);
-		console.log(showDetail)
-	}
 
 	return (
 
@@ -121,7 +115,7 @@ const Main = () => {
 		<Grid container spacing={3}>
 		{data?.map(item => (
 			<Grid item key={item.id} xs={12} sm={4}>
-			<CheeseCard item={item} handleAddToCart={handleAddToCart} handleClickCard={handleClickCard}/>
+				<CheeseCard item={item} handleAddToCart={handleAddToCart}/>
 			</Grid>
 		))}
 		</Grid>
