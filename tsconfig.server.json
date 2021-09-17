@@ -5,7 +5,6 @@
     "module": "commonjs",
     "target": "es5",
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
     "lib": [
       "es2017"
     ],
