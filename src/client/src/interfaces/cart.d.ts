@@ -7,3 +7,17 @@ export interface ICartItem {
 	title: string;
 	amount: number;
 }
+
+export interface IOrder {
+	items: Array<ICartItem>;
+	amount: number;
+}
+
+export interface IOrderItem {
+	id: number;
+	amount: number;
+}
+
+export interface IOrderResponse {
+
+}

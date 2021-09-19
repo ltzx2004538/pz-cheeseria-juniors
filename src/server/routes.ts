@@ -18,8 +18,8 @@ router.get('/api/orders', (req, res) => {
 });
 
 router.post('/api/orders', jsonParser, (req,res) => {
-	const {cheeses,amount} = req.body;
-	const result = orderService.addOrder(cheeses,amount);
+	const {items,amount} = req.body;
+	const result = orderService.addOrder(items,amount);
 	res.json(result);
 });
 export default router;

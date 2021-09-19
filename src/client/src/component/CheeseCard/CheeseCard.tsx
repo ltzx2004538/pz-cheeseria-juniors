@@ -17,7 +17,6 @@ const CheeseCard: React.FC<Props> = ({ item, handleAddToCart}) => {
 
 	const handleClickCard = () => {
 		setShowDetail(prevState => !prevState);
-		console.log(showDetail)
 	}
 
 	return (
