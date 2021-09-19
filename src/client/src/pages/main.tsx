@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
+import { useDispatch, useSelector } from 'react-redux';
 // Components
 import CheeseCard from '../component/CheeseCard/CheeseCard';
 import Cart from '../component/Cart/Cart';
@@ -16,6 +17,10 @@ import { AppBar, Toolbar, Typography } from '@material-ui/core';
 //Types
 import {ICartItem} from '../interfaces/cart';
 
+interface State {
+	order: any
+}
+
 const getCheeses = async (): Promise<ICartItem[]> =>
 	await (await fetch(`api/cheeses`)).json();
 
@@ -26,7 +31,16 @@ const Main = () => {
 		'cheeses',
 		getCheeses
 	);
-	console.log(data);
+	// const dispatch = useDispatch();
+	// const orders = useSelector((state: State) => state.order);
+
+	// useEffect(()=>{
+	// 	dispatch({
+	// 		type: "GET_ORDER"
+	// 	});
+	// },[]);
+
+	// console.log(data);
 
 	const getTotalItems = (items: ICartItem[]) =>
 		items.reduce((ack: number, item) => ack + item.amount, 0);
@@ -50,17 +64,24 @@ const Main = () => {
 	};
 
 	const handleRemoveFromCart = (id: number) => {
-	setCartItems(prev =>
-		prev.reduce((ack, item) => {
-		if (item.id === id) {
-			if (item.amount === 1) return ack;
-			return [...ack, { ...item, amount: item.amount - 1 }];
-		} else {
-			return [...ack, item];
-		}
-		}, [] as ICartItem[])
-	);
+		setCartItems(prev =>
+			prev.reduce((ack, item) => {
+			if (item.id === id) {
+				if (item.amount === 1) return ack;
+				return [...ack, { ...item, amount: item.amount - 1 }];
+			} else {
+				return [...ack, item];
+			}
+			}, [] as ICartItem[])
+		);
 	};
+
+	const closeCart =()=> {
+		setCartOpen(false);
+	}
+	const clearCartItems =()=> {
+		setCartItems([]);
+	}
 
 	if (isLoading) return <LinearProgress />;
 	if (error) return <div>Something went wrong ...</div>;
@@ -108,6 +129,8 @@ const Main = () => {
 		<Cart
 			cartItems={cartItems}
 			addToCart={handleAddToCart}
+			closeCart={closeCart}
+			clearCartItems={clearCartItems}
 			removeFromCart={handleRemoveFromCart}
 		/>
 		</Drawer>

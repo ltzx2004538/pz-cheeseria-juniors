@@ -46,7 +46,6 @@ export class OrderServiceImpl implements OrderService {
 		let id = 1;
 		const totalOrder = this.getOrders();
 		try {
-			console.log(items)
 			if(!checkAllNumber(items)){
 				const result = {status: 400, data: "invalid data"}
 				return result;
