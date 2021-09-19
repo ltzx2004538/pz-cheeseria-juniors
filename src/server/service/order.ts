@@ -1,11 +1,12 @@
 import {Order} from '../models/order';
+import { CartItem } from '../models/cartItem';
 import { OrderRepository } from '../repository/OrderRepository';
 import { InMemoryOrderRepository } from '../repository/InMemoryOrderRepository';
 import {checkAllNumber} from '../utils/validation';
 
 interface OrderService {
 	getOrders(): OrderResponse,
-	addOrder(cheeses: Array<number>,amount: number): Order | InvalidResponse,
+	addOrder(items: Array<CartItem>,totalPrice: number): Order | InvalidResponse,
 }
 
 interface OrderResponse {
@@ -41,18 +42,27 @@ export class OrderServiceImpl implements OrderService {
 		}
 	}
 
-	addOrder(cheeses: Array<number>, amount: number): Order | InvalidResponse{
+	addOrder(items: Array<CartItem>, totalPrice: number): Order | InvalidResponse{
 		let id = 1;
 		const totalOrder = this.getOrders();
-		if(!checkAllNumber(cheeses)) {
-			const result = {status: 400, data: "invalid data"}
-			return result;
+		try {
+			console.log(items)
+			if(!checkAllNumber(items)){
+				const result = {status: 400, data: "invalid data"}
+				return result;
+			}
+			if (totalOrder.data.length && totalOrder.status != 400) {
+				id = totalOrder.data.length + 1;
+			}
+			const order = new Order(id.toString(), items, totalPrice);
+			const result = this.repository.addOrder(order);
+			return result
 		}
-		if (totalOrder.data.length && totalOrder.status != 400) {
-			id = totalOrder.data.length + 1;
+		catch(err) {
+			return {
+				status: 500,
+				data: "something wrong"
+			}
 		}
-		const order = new Order(id.toString(), cheeses, amount);
-		const result = this.repository.addOrder(order);
-		return result
 	}
 }

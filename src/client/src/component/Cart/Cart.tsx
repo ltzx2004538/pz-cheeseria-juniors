@@ -1,5 +1,6 @@
+import React, {useState, useEffect} from 'react';
 import CartItem from './CartItem/CartItem';
-import { Wrapper } from './Cart.styles';
+import { Wrapper, CheckOutBtn} from './Cart.styles';
 import { ICartItem } from '../../interfaces/cart';
 
 type Props = {
@@ -9,8 +10,21 @@ type Props = {
 };
 
 const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
-	const calculateTotal = (items: ICartItem[]) =>
-		items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
+	const [totalPrice, setTotalPrice] = useState<number>(0);
+
+	useEffect(()=> {
+		const total = calculateTotal(cartItems);
+		setTotalPrice(total);
+	},[cartItems]);
+	
+	const calculateTotal = (items: ICartItem[]) => {
+		return items.reduce((ack: number, item) => ack + item.amount * item.price, 0)
+	}
+
+	const handleCheckOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
+		e.stopPropagation();
+		console.log(cartItems);
+	}
 
 	return (
 		<Wrapper>
@@ -24,7 +38,8 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
 					removeFromCart={removeFromCart}
 				/>
 			))}
-			<h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
+			<h2>Total: ${totalPrice.toFixed(2)}</h2>
+			<CheckOutBtn onClick={e=>handleCheckOut(e)}> Check Out </CheckOutBtn>
 		</Wrapper>
 	);
 };
