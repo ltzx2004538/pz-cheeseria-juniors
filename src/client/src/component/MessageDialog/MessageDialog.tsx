@@ -16,7 +16,7 @@ const MessageDialog: React.FC<Props> = (props)=>{
 				onClose={handleCloseDialog}
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description">
-			<DialogTitle id="alert-dialog-title">
+			<DialogTitle data-cy="response-message" id="alert-dialog-title">
 				{message}
 		 	</DialogTitle>
 			<DialogActions>

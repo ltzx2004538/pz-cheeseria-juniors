@@ -81,7 +81,7 @@ const Cart: React.FC<Props> = (props) => {
 				/>
 			))}
 			<h2>Total: ${totalPrice.toFixed(2)}</h2>
-			<CheckOutBtn isDisabled={isBtnLock.current} disabled={isBtnLock.current} onClick={e=>handleCheckOut(e)}> Check Out </CheckOutBtn>
+			<CheckOutBtn data-cy="send-order" isDisabled={isBtnLock.current} disabled={isBtnLock.current} onClick={e=>handleCheckOut(e)}> Check Out </CheckOutBtn>
 		</Wrapper>
 	);
 };
