@@ -16,12 +16,17 @@ type Props = {
 const Cart: React.FC<Props> = (props) => {
 	const { cartItems, addToCart, removeFromCart, closeCart, clearCartItems} = props;
 	const [totalPrice, setTotalPrice] = useState<number>(0);
-	const isBtnLock = useRef(false);
+	const isBtnLock = useRef(true);
 	const dispatch = useDispatch();
 	const isOrderReceived = useSelector((state: any) => state.order.isOrderReceived);
 	
-
 	useEffect(()=> {
+		if(cartItems.length == 0) {
+			isBtnLock.current = true;
+		}
+		else {
+			isBtnLock.current = false;
+		}
 		const total = calculateTotal(cartItems);
 		setTotalPrice(total);
 	},[cartItems]);
@@ -36,7 +41,7 @@ const Cart: React.FC<Props> = (props) => {
 			});
 		}
 		else if (isOrderReceived === ORDER_STATUS.FAILED) {
-			console.log('failed');
+			console.log('check out failed');
 		}
 	},[isOrderReceived])
 	
@@ -76,7 +81,7 @@ const Cart: React.FC<Props> = (props) => {
 				/>
 			))}
 			<h2>Total: ${totalPrice.toFixed(2)}</h2>
-			<CheckOutBtn disabled={isBtnLock.current} onClick={e=>handleCheckOut(e)}> Check Out </CheckOutBtn>
+			<CheckOutBtn isDisabled={isBtnLock.current} disabled={isBtnLock.current} onClick={e=>handleCheckOut(e)}> Check Out </CheckOutBtn>
 		</Wrapper>
 	);
 };
