@@ -4,7 +4,7 @@ import {requestGetOrders} from '../../../services/order';
 function* getOrders() {
 	try {
 		const response = yield call(requestGetOrders);
-		if (response.status === 200) {
+		if (response.data.status === 200) {
 			yield put ({
 				type: 'SET_ORDER',
 				payload: response.data.data

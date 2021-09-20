@@ -1,5 +1,4 @@
-import { withStyles } from '@material-ui/styles';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import {Button} from '../Button/Button';
 
 export const Wrapper = styled.aside`
@@ -8,13 +7,22 @@ export const Wrapper = styled.aside`
 	padding: 20px;
 `;
 
-export const CheckOutBtn = styled(Button)`
+interface CheckOutProps {
+	isDisabled: boolean
+}
+export const CheckOutBtn = styled(Button)<CheckOutProps>`
 	width: 100px;
 	height: 50px;
 	background-color: #e0e0e0;
 	border-radius: 5px;
-
-	&:active {
-		background-color: #ffffff;
-	}
+	cursor: not-allowed;
+	${(props: CheckOutProps) => !props.isDisabled && css`
+		cursor: pointer;
+		&:hover {
+			background-color: #adb3b8}
+		}
+		&:active {
+			background-color: #ffffff;
+		}
+	`}
 `

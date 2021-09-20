@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useRef} from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CartItem from './CartItem/CartItem';
-import { Wrapper, CheckOutBtn} from './Cart.styles';
-import { ICartItem, IOrderItem} from '../../interfaces/cart';
+import { Wrapper, CheckOutBtn } from './Cart.styles';
+import { ICartItem, IOrderItem } from '../../interfaces/cart';
+import { ORDER_STATUS } from '../../utils/constant';
 
 type Props = {
 	cartItems: ICartItem[];
@@ -15,13 +16,34 @@ type Props = {
 const Cart: React.FC<Props> = (props) => {
 	const { cartItems, addToCart, removeFromCart, closeCart, clearCartItems} = props;
 	const [totalPrice, setTotalPrice] = useState<number>(0);
-	const isBtnLock = useRef(false);
+	const isBtnLock = useRef(true);
 	const dispatch = useDispatch();
-
+	const isOrderReceived = useSelector((state: any) => state.order.isOrderReceived);
+	
 	useEffect(()=> {
+		if(cartItems.length == 0) {
+			isBtnLock.current = true;
+		}
+		else {
+			isBtnLock.current = false;
+		}
 		const total = calculateTotal(cartItems);
 		setTotalPrice(total);
 	},[cartItems]);
+
+	useEffect(()=>{
+		if(isOrderReceived === ORDER_STATUS.SUCCEED) {
+			closeCart();
+			clearCartItems();
+			dispatch({
+				type: 'ORDER_RECEIVED',
+				payload: ORDER_STATUS.PENDING
+			});
+		}
+		else if (isOrderReceived === ORDER_STATUS.FAILED) {
+			console.log('check out failed');
+		}
+	},[isOrderReceived])
 	
 	const calculateTotal = (items: ICartItem[]) => {
 		return items.reduce((ack: number, item) => ack + item.amount * item.price, 0)
@@ -43,8 +65,6 @@ const Cart: React.FC<Props> = (props) => {
 					amount: totalPrice
 				}
 			});
-			closeCart();
-			clearCartItems();
 		};
 	}
 
@@ -61,7 +81,7 @@ const Cart: React.FC<Props> = (props) => {
 				/>
 			))}
 			<h2>Total: ${totalPrice.toFixed(2)}</h2>
-			<CheckOutBtn disabled={isBtnLock.current} onClick={e=>handleCheckOut(e)}> Check Out </CheckOutBtn>
+			<CheckOutBtn isDisabled={isBtnLock.current} disabled={isBtnLock.current} onClick={e=>handleCheckOut(e)}> Check Out </CheckOutBtn>
 		</Wrapper>
 	);
 };
