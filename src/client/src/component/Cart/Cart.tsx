@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CartItem from './CartItem/CartItem';
 import { Wrapper, CheckOutBtn} from './Cart.styles';
 import { ICartItem, IOrderItem} from '../../interfaces/cart';
+import {ORDER_STATUS} from '../../utils/constant';
 
 type Props = {
 	cartItems: ICartItem[];
@@ -17,11 +18,27 @@ const Cart: React.FC<Props> = (props) => {
 	const [totalPrice, setTotalPrice] = useState<number>(0);
 	const isBtnLock = useRef(false);
 	const dispatch = useDispatch();
+	const isOrderReceived = useSelector((state: any) => state.order.isOrderReceived);
+	
 
 	useEffect(()=> {
 		const total = calculateTotal(cartItems);
 		setTotalPrice(total);
 	},[cartItems]);
+
+	useEffect(()=>{
+		if(isOrderReceived === ORDER_STATUS.SUCCEED) {
+			closeCart();
+			clearCartItems();
+			dispatch({
+				type: 'ORDER_RECEIVED',
+				payload: ORDER_STATUS.PENDING
+			});
+		}
+		else if (isOrderReceived === ORDER_STATUS.FAILED) {
+			console.log('failed');
+		}
+	},[isOrderReceived])
 	
 	const calculateTotal = (items: ICartItem[]) => {
 		return items.reduce((ack: number, item) => ack + item.amount * item.price, 0)
@@ -43,8 +60,6 @@ const Cart: React.FC<Props> = (props) => {
 					amount: totalPrice
 				}
 			});
-			closeCart();
-			clearCartItems();
 		};
 	}
 

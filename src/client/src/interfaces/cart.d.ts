@@ -17,7 +17,3 @@ export interface IOrderItem {
 	id: number;
 	amount: number;
 }
-
-export interface IOrderResponse {
-
-}

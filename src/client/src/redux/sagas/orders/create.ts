@@ -1,15 +1,15 @@
-import { takeLatest, call} from 'redux-saga/effects';
-import {requestCreateOrder} from '../../../services/order';
+import { takeLatest, call, put} from 'redux-saga/effects';
+import { requestCreateOrder } from '../../../services/order';
+import { ORDER_STATUS } from '../../../utils/constant';
 
 function* createOrder(action: any) {
 	try {
 		const response = yield call(requestCreateOrder,action.payload);
 		if (response.status === 200) {
-			console.log("success")
-			return Promise.resolve(response.data);
+			yield put({ type: 'ORDER_RECEIVED', payload: ORDER_STATUS.SUCCEED })
 		}
 		else {
-			return Promise.reject(response.data);
+			yield put({ type: 'ORDER_RECEIVED', payload: ORDER_STATUS.FAILED })
 		}
 	}
 	catch {
