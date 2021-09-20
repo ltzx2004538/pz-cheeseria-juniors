@@ -21,7 +21,9 @@ This project is a cheese seller page, so the customer can buy the cheese and put
   2. The backend don't have a real database, curretly the orders will be saved in memory.
   3. The purchase record only save the ID of each cheese, so the user can only see the ID number of the cheese they have purchased before
      This can be solved if we have a real database, so the cheeses details can be populated by the ID in the database layer. 
-  5. The application don't have responsive design.
+  5. The application working fine in Google Chrome but not looks good in other browser.
+  6. The application don't have responsive design.
+
 
 ## Important Scripts
 
