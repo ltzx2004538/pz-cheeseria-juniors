@@ -134,16 +134,16 @@ const Main = () => {
 				Welcome to Patient Zero's Cheeseria
 			</HeaderTypography>
 
-			<StyledButton onClick={() => setCartOpen(true)}>
+			<StyledButton data-cy="open-cart" onClick={() => setCartOpen(true)}>
 				<Badge
-				badgeContent={getTotalItems(cartItems)}
-				color='error'
-				data-cy="badge-count">
-				<AddShoppingCartIcon />
+					badgeContent={getTotalItems(cartItems)}
+					color='error'
+					data-cy="badge-count">
+						<AddShoppingCartIcon />
 				</Badge>
 
 				<Typography variant="subtitle2">
-				Cart
+					Cart
 				</Typography>
 			</StyledButton>
 
