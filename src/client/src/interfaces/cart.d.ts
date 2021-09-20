@@ -9,8 +9,9 @@ export interface ICartItem {
 }
 
 export interface IOrder {
-	items: Array<ICartItem>;
-	amount: number;
+	id: number;
+	items: Array<IOrderItem>;
+	totalPrice: number;
 }
 
 export interface IOrderItem {

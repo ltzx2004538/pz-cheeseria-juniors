@@ -2,7 +2,7 @@ import {OrderAction} from '../types/order';
 import {ORDER_STATUS} from '../../utils/constant';
 
 const initialState = {
-	orders: undefined,
+	orders: [],
 	isOrderReceived: ORDER_STATUS.PENDING
 };
 

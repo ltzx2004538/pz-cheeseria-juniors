@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CartItem from './CartItem/CartItem';
-import { Wrapper, CheckOutBtn} from './Cart.styles';
-import { ICartItem, IOrderItem} from '../../interfaces/cart';
-import {ORDER_STATUS} from '../../utils/constant';
+import { Wrapper, CheckOutBtn } from './Cart.styles';
+import { ICartItem, IOrderItem } from '../../interfaces/cart';
+import { ORDER_STATUS } from '../../utils/constant';
 
 type Props = {
 	cartItems: ICartItem[];

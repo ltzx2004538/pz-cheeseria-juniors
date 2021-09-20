@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 // Components
@@ -10,12 +10,15 @@ import Grid from '@material-ui/core/Grid';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import RestoreIcon from '@material-ui/icons/Restore';
 import Badge from '@material-ui/core/Badge';
+import MessageDialog from '../component/MessageDialog';
+import PurchaseHistoryDialog from '../component/PurchaseHistoryDialog';
 // Styles
 import { Wrapper, StyledButton, StyledAppBar, HeaderTypography } from './main.styles';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
 
 //Types
 import {ICartItem} from '../interfaces/cart';
+import { ORDER_STATUS } from '../utils/constant';
 
 interface State {
 	order: any
@@ -31,16 +34,31 @@ const Main = () => {
 		'cheeses',
 		getCheeses
 	);
-	// const dispatch = useDispatch();
-	// const orders = useSelector((state: State) => state.order);
+	const [confirmMessage, setConfirmMessage] = useState("")
+	const [showMessage, setShowMessage] = useState(false);
+	const [showHistory, setShowHistory] = useState(false);
+	const dispatch = useDispatch();
+	const orders = useSelector((state: State) => state.order.orders);
+	const isOrderReceived = useSelector((state: any) => state.order.isOrderReceived);
 
-	// useEffect(()=>{
-	// 	dispatch({
-	// 		type: "GET_ORDER"
-	// 	});
-	// },[]);
+	useEffect(()=>{
+		if(isOrderReceived === ORDER_STATUS.SUCCEED) {
+			setConfirmMessage("Check out succeed");
+			setShowMessage(true);
+		}
+		else if (isOrderReceived === ORDER_STATUS.FAILED) {
+			setConfirmMessage("Check out failed");
+			setShowMessage(true);
+		}
+	},[isOrderReceived])
 
-	// console.log(data);
+	useEffect(()=>{
+		if(showHistory == true){
+			dispatch({
+				type: "GET_ORDER"
+			});
+		}
+	},[showHistory]);
 
 	const getTotalItems = (items: ICartItem[]) =>
 		items.reduce((ack: number, item) => ack + item.amount, 0);
@@ -76,18 +94,26 @@ const Main = () => {
 		);
 	};
 
-	const closeCart =()=> {
+	const closeCart = ()=> {
 		setCartOpen(false);
 	}
-	const clearCartItems =()=> {
+	const clearCartItems = () => {
 		setCartItems([]);
 	}
 
+	const handleCloseMessage =() =>{
+		setShowMessage(false);
+	}
+
+	const handleHistoryDialog = (isShow: boolean)=> {
+		setShowHistory(isShow);
+	}
+
+	const memoHistory = useCallback((show)=>handleHistoryDialog(show),[showHistory]);
+
 	if (isLoading) return <LinearProgress />;
 	if (error) return <div>Something went wrong ...</div>;
-
 	return (
-
 	<Wrapper>
 		<StyledAppBar position="static">
 		<Toolbar>
@@ -97,7 +123,7 @@ const Main = () => {
 			justify="space-between"
 			alignItems="center"
 			>
-			<StyledButton>
+			<StyledButton onClick={()=>handleHistoryDialog(true)}>
 				<RestoreIcon />
 				<Typography variant="subtitle2">
 				Recent Purchases
@@ -142,6 +168,12 @@ const Main = () => {
 			</Grid>
 		))}
 		</Grid>
+		{showMessage&&
+			<MessageDialog message= {confirmMessage} isDialogShow= {showMessage} handleCloseDialog={handleCloseMessage}/>
+		}
+		{showHistory &&
+			<PurchaseHistoryDialog showDialog= {showHistory} handleClose={()=>memoHistory(false)} items={orders}/>
+		}
 	</Wrapper>
 	);
 };
