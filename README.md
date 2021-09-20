@@ -1,4 +1,4 @@
-# Welcome to Patient Zero's Cheeseria Coding Challenge From Yurun Yu
+# Welcome to Patient Zero's Cheeseria Coding Challenge From Oliver Yu
 
 ## Overview
 
