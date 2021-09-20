@@ -6,6 +6,9 @@ This is my code test work for Patient Zero.
 
 This project is a cheese seller page, so the customer can buy the cheese and put it into a cart then checkout.
 
+## Technology Stack
+   React, Redux, Redux-saga, Typescript, Material-UI, Styled Component, Cypress
+
 ## The feature I have made:
   1. Add a dialog for each cheese card, so the user can see the details of each cheese.
   2. Add a checkout button in the cart slider, so user can send the order to the backend after they click the button

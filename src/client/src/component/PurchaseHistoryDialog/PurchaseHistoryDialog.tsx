@@ -8,6 +8,9 @@ interface Props {
 	items: Array<IOrder>;
 }
 
+//curretly, the user can only see the cheese ID
+//will be improved if we have a real database
+
 const PurchaseHistoryDialog: React.FC<Props> = (props) =>{
 	const { items, showDialog, handleClose } = props;
 	return(
